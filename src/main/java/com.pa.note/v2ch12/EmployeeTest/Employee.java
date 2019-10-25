@@ -1,28 +1,26 @@
+package com.pa.note.v2ch12.EmployeeTest;
+
 /**
- * @version 1.10 1999-11-13
  * @author Cay Horstmann
+ * @version 1.10 1999-11-13
  */
 
-public class Employee
-{
-   public Employee(String n, double s)
-   {
-      name = n;
-      salary = s;
-   }
+public class Employee {
+    public Employee(String n, double s) {
+        name = n;
+        salary = s;
+    }
 
-   public native void raiseSalary(double byPercent);
+    public native void raiseSalary(double byPercent);
 
-   public void print()
-   {
-      System.out.println(name + " " + salary);
-   }
+    public void print() {
+        System.out.println(name + " " + salary);
+    }
 
-   private String name;
-   private double salary;
+    private String name;
+    private double salary;
 
-   static
-   {
-      System.loadLibrary("Employee");
-   }
+    static {
+        System.loadLibrary("Employee");
+    }
 }

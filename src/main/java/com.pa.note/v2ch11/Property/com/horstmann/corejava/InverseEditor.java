@@ -1,8 +1,9 @@
-package com.horstmann.corejava;
+package com.pa.note.v2ch11.Property.com.horstmann.corejava;
 
-import java.awt.*;
-import java.beans.*;
 import javax.swing.*;
+import java.awt.*;
+import java.beans.PropertyEditorSupport;
+
 
 /**
  * The property editor for the inverse property of the ChartBean. The inverse property toggles
@@ -14,7 +15,7 @@ public class InverseEditor extends PropertyEditorSupport
 {
    public Component getCustomEditor()
    {
-      return new InverseEditorPanel(this);
+      return new com.horstmann.corejava.InverseEditorPanel(this);
    }
 
    public boolean supportsCustomEditor()

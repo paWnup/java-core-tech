@@ -1,135 +1,130 @@
-import java.awt.*;
-import java.awt.event.*;
+package com.pa.note.v1ch09.GroupLayoutTest;
+
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
- * @version 1.0 2007-04-27
  * @author Cay Horstmann
+ * @version 1.0 2007-04-27
  */
-public class GroupLayoutTest
-{
-   public static void main(String[] args)
-   {
-      EventQueue.invokeLater(new Runnable()
-         {
-            public void run()
-            {
-               FontFrame frame = new FontFrame();
-               frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-               frame.setVisible(true);
+public class GroupLayoutTest {
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                FontFrame frame = new FontFrame();
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setVisible(true);
             }
-         });
-   }
+        });
+    }
 }
 
 /**
  * A frame that uses a group layout to arrange font selection components.
  */
-class FontFrame extends JFrame
-{
-   public FontFrame()
-   {
-      setTitle("GroupLayoutTest");
-      setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+class FontFrame extends JFrame {
+    public FontFrame() {
+        setTitle("GroupLayoutTest");
+        setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
-      ActionListener listener = new FontAction();
+        ActionListener listener = new FontAction();
 
-      // construct components
+        // construct components
 
-      JLabel faceLabel = new JLabel("Face: ");
+        JLabel faceLabel = new JLabel("Face: ");
 
-      face = new JComboBox(new String[] { "Serif", "SansSerif", "Monospaced", "Dialog",
-            "DialogInput" });
+        face = new JComboBox(new String[]{"Serif", "SansSerif", "Monospaced", "Dialog",
+                "DialogInput"});
 
-      face.addActionListener(listener);
+        face.addActionListener(listener);
 
-      JLabel sizeLabel = new JLabel("Size: ");
+        JLabel sizeLabel = new JLabel("Size: ");
 
-      size = new JComboBox(new String[] { "8", "10", "12", "15", "18", "24", "36", "48" });
+        size = new JComboBox(new String[]{"8", "10", "12", "15", "18", "24", "36", "48"});
 
-      size.addActionListener(listener);
+        size.addActionListener(listener);
 
-      bold = new JCheckBox("Bold");
-      bold.addActionListener(listener);
+        bold = new JCheckBox("Bold");
+        bold.addActionListener(listener);
 
-      italic = new JCheckBox("Italic");
-      italic.addActionListener(listener);
+        italic = new JCheckBox("Italic");
+        italic.addActionListener(listener);
 
-      sample = new JTextArea();
-      sample.setText("The quick brown fox jumps over the lazy dog");
-      sample.setEditable(false);
-      sample.setLineWrap(true);
-      sample.setBorder(BorderFactory.createEtchedBorder());
+        sample = new JTextArea();
+        sample.setText("The quick brown fox jumps over the lazy dog");
+        sample.setEditable(false);
+        sample.setLineWrap(true);
+        sample.setBorder(BorderFactory.createEtchedBorder());
 
-      pane = new JScrollPane(sample);
+        pane = new JScrollPane(sample);
 
-      GroupLayout layout = new GroupLayout(getContentPane());
-      setLayout(layout);
-      layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(
-                  layout.createSequentialGroup().addContainerGap().addGroup(
-                        layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
-                              GroupLayout.Alignment.TRAILING,
-                              layout.createSequentialGroup().addGroup(
-                                    layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                          .addComponent(faceLabel).addComponent(sizeLabel))
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(
-                                          layout.createParallelGroup(
-                                                GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(size).addComponent(face)))
-                              .addComponent(italic).addComponent(bold)).addPreferredGap(
-                        LayoutStyle.ComponentPlacement.RELATED).addComponent(pane)
-                        .addContainerGap()));
+        GroupLayout layout = new GroupLayout(getContentPane());
+        setLayout(layout);
+        layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(
+                        layout.createSequentialGroup().addContainerGap().addGroup(
+                                layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
+                                        GroupLayout.Alignment.TRAILING,
+                                        layout.createSequentialGroup().addGroup(
+                                                layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                        .addComponent(faceLabel).addComponent(sizeLabel))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(
+                                                        layout.createParallelGroup(
+                                                                GroupLayout.Alignment.LEADING, false)
+                                                                .addComponent(size).addComponent(face)))
+                                        .addComponent(italic).addComponent(bold)).addPreferredGap(
+                                LayoutStyle.ComponentPlacement.RELATED).addComponent(pane)
+                                .addContainerGap()));
 
-      layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] { face, size });
+        layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[]{face, size});
 
-      layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(
-                  layout.createSequentialGroup().addContainerGap().addGroup(
-                        layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(
-                              pane, GroupLayout.Alignment.TRAILING).addGroup(
-                              layout.createSequentialGroup().addGroup(
-                                    layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                          .addComponent(face).addComponent(faceLabel))
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(
-                                          layout.createParallelGroup(
-                                                GroupLayout.Alignment.BASELINE).addComponent(size)
-                                                .addComponent(sizeLabel)).addPreferredGap(
-                                          LayoutStyle.ComponentPlacement.RELATED).addComponent(
-                                          italic, GroupLayout.DEFAULT_SIZE,
-                                          GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(bold, GroupLayout.DEFAULT_SIZE,
-                                          GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addContainerGap()));
-   }
+        layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(
+                        layout.createSequentialGroup().addContainerGap().addGroup(
+                                layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(
+                                        pane, GroupLayout.Alignment.TRAILING).addGroup(
+                                        layout.createSequentialGroup().addGroup(
+                                                layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(face).addComponent(faceLabel))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(
+                                                        layout.createParallelGroup(
+                                                                GroupLayout.Alignment.BASELINE).addComponent(size)
+                                                                .addComponent(sizeLabel)).addPreferredGap(
+                                                LayoutStyle.ComponentPlacement.RELATED).addComponent(
+                                                italic, GroupLayout.DEFAULT_SIZE,
+                                                GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(bold, GroupLayout.DEFAULT_SIZE,
+                                                        GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addContainerGap()));
+    }
 
-   public static final int DEFAULT_WIDTH = 300;
-   public static final int DEFAULT_HEIGHT = 200;
+    public static final int DEFAULT_WIDTH = 300;
+    public static final int DEFAULT_HEIGHT = 200;
 
-   private JComboBox face;
-   private JComboBox size;
-   private JCheckBox bold;
-   private JCheckBox italic;
-   private JScrollPane pane;
-   private JTextArea sample;
+    private JComboBox face;
+    private JComboBox size;
+    private JCheckBox bold;
+    private JCheckBox italic;
+    private JScrollPane pane;
+    private JTextArea sample;
 
-   /**
-    * An action listener that changes the font of the sample text.
-    */
-   private class FontAction implements ActionListener
-   {
-      public void actionPerformed(ActionEvent event)
-      {
-         String fontFace = (String) face.getSelectedItem();
-         int fontStyle = (bold.isSelected() ? Font.BOLD : 0)
-               + (italic.isSelected() ? Font.ITALIC : 0);
-         int fontSize = Integer.parseInt((String) size.getSelectedItem());
-         Font font = new Font(fontFace, fontStyle, fontSize);
-         sample.setFont(font);
-         sample.repaint();
-      }
-   }
+    /**
+     * An action listener that changes the font of the sample text.
+     */
+    private class FontAction implements ActionListener {
+        public void actionPerformed(ActionEvent event) {
+            String fontFace = (String) face.getSelectedItem();
+            int fontStyle = (bold.isSelected() ? Font.BOLD : 0)
+                    + (italic.isSelected() ? Font.ITALIC : 0);
+            int fontSize = Integer.parseInt((String) size.getSelectedItem());
+            Font font = new Font(fontFace, fontStyle, fontSize);
+            sample.setFont(font);
+            sample.repaint();
+        }
+    }
 }

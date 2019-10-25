@@ -1,55 +1,53 @@
-import java.awt.*;
+package com.pa.note.v2ch11.ActionListenerFor;
+
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * A frame with a button panel
- * @version 1.00 2004-08-17
+ *
  * @author Cay Horstmann
+ * @version 1.00 2004-08-17
  */
-public class ButtonFrame extends JFrame
-{
-   public ButtonFrame()
-   {
-      setTitle("ButtonTest");
-      setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+public class ButtonFrame extends JFrame {
+    public ButtonFrame() {
+        setTitle("ButtonTest");
+        setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
-      panel = new JPanel();
-      add(panel);
+        panel = new JPanel();
+        add(panel);
 
-      yellowButton = new JButton("Yellow");
-      blueButton = new JButton("Blue");
-      redButton = new JButton("Red");
+        yellowButton = new JButton("Yellow");
+        blueButton = new JButton("Blue");
+        redButton = new JButton("Red");
 
-      panel.add(yellowButton);
-      panel.add(blueButton);
-      panel.add(redButton);
+        panel.add(yellowButton);
+        panel.add(blueButton);
+        panel.add(redButton);
 
-      ActionListenerInstaller.processAnnotations(this);
-   }
+        ActionListenerInstaller.processAnnotations(this);
+    }
 
-   @ActionListenerFor(source = "yellowButton")
-   public void yellowBackground()
-   {
-      panel.setBackground(Color.YELLOW);
-   }
+    @ActionListenerFor(source = "yellowButton")
+    public void yellowBackground() {
+        panel.setBackground(Color.YELLOW);
+    }
 
-   @ActionListenerFor(source = "blueButton")
-   public void blueBackground()
-   {
-      panel.setBackground(Color.BLUE);
-   }
+    @ActionListenerFor(source = "blueButton")
+    public void blueBackground() {
+        panel.setBackground(Color.BLUE);
+    }
 
-   @ActionListenerFor(source = "redButton")
-   public void redBackground()
-   {
-      panel.setBackground(Color.RED);
-   }
+    @ActionListenerFor(source = "redButton")
+    public void redBackground() {
+        panel.setBackground(Color.RED);
+    }
 
-   public static final int DEFAULT_WIDTH = 300;
-   public static final int DEFAULT_HEIGHT = 200;
+    public static final int DEFAULT_WIDTH = 300;
+    public static final int DEFAULT_HEIGHT = 200;
 
-   private JPanel panel;
-   private JButton yellowButton;
-   private JButton blueButton;
-   private JButton redButton;
+    private JPanel panel;
+    private JButton yellowButton;
+    private JButton blueButton;
+    private JButton redButton;
 }

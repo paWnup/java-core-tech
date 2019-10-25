@@ -1,18 +1,36 @@
+package com.pa.note.v1ch12.PairTest2;
+
 /**
- * @version 1.00 2004-05-10
  * @author Cay Horstmann
+ * @version 1.00 2004-05-10
  */
-public class Pair<T> 
-{
-   public Pair() { first = null; second = null; }
-   public Pair(T first, T second) { this.first = first;  this.second = second; }
+public class Pair<T> {
+    public Pair() {
+        first = null;
+        second = null;
+    }
 
-   public T getFirst() { return first; }
-   public T getSecond() { return second; }
+    public Pair(T first, T second) {
+        this.first = first;
+        this.second = second;
+    }
 
-   public void setFirst(T newValue) { first = newValue; }
-   public void setSecond(T newValue) { second = newValue; }
+    public T getFirst() {
+        return first;
+    }
 
-   private T first;
-   private T second;
+    public T getSecond() {
+        return second;
+    }
+
+    public void setFirst(T newValue) {
+        first = newValue;
+    }
+
+    public void setSecond(T newValue) {
+        second = newValue;
+    }
+
+    private T first;
+    private T second;
 }

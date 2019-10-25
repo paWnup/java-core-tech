@@ -1,34 +1,30 @@
-import java.io.*;
+package com.pa.note.v2ch10.Warehouse2;
 
-public class Product implements Serializable
-{
-   public Product(String description, double price)
-   {
-      this.description = description;
-      this.price = price;
-   }
+import java.io.Serializable;
 
-   public String getDescription()
-   {
-      return description;
-   }
+public class Product implements Serializable {
+    public Product(String description, double price) {
+        this.description = description;
+        this.price = price;
+    }
 
-   public double getPrice()
-   {
-      return price;
-   }
+    public String getDescription() {
+        return description;
+    }
 
-   public Warehouse getLocation()
-   {
-      return location;
-   }
+    public double getPrice() {
+        return price;
+    }
 
-   public void setLocation(Warehouse location)
-   {
-      this.location = location;
-   }
+    public Warehouse getLocation() {
+        return location;
+    }
 
-   private String description;
-   private double price;
-   private Warehouse location;
+    public void setLocation(Warehouse location) {
+        this.location = location;
+    }
+
+    private String description;
+    private double price;
+    private Warehouse location;
 }

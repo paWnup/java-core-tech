@@ -1,292 +1,259 @@
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import javax.naming.*;
+package com.pa.note.v2ch04.LDAPTest;
+
+import javax.naming.Context;
+import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
 import javax.naming.directory.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Hashtable;
+import java.util.Properties;
 
 /**
  * This program demonstrates access to a hierarchical database through LDAP
- * @version 1.01 2007-06-28
+ *
  * @author Cay Horstmann
+ * @version 1.01 2007-06-28
  */
-public class LDAPTest
-{
-   public static void main(String[] args)
-   {
-      EventQueue.invokeLater(new Runnable()
-         {
-            public void run()
-            {
-               JFrame frame = new LDAPFrame();
-               frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-               frame.setVisible(true);
+public class LDAPTest {
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                JFrame frame = new LDAPFrame();
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setVisible(true);
             }
-         });
-   }
+        });
+    }
 }
 
 /**
  * The frame that holds the data panel and the navigation buttons.
  */
-class LDAPFrame extends JFrame
-{
-   public LDAPFrame()
-   {
-      setTitle("LDAPTest");
-      setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+class LDAPFrame extends JFrame {
+    public LDAPFrame() {
+        setTitle("LDAPTest");
+        setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
-      JPanel northPanel = new JPanel();
-      northPanel.setLayout(new java.awt.GridLayout(1, 2, 3, 1));
-      northPanel.add(new JLabel("uid", SwingConstants.RIGHT));
-      uidField = new JTextField();
-      northPanel.add(uidField);
-      add(northPanel, BorderLayout.NORTH);
+        JPanel northPanel = new JPanel();
+        northPanel.setLayout(new java.awt.GridLayout(1, 2, 3, 1));
+        northPanel.add(new JLabel("uid", SwingConstants.RIGHT));
+        uidField = new JTextField();
+        northPanel.add(uidField);
+        add(northPanel, BorderLayout.NORTH);
 
-      JPanel buttonPanel = new JPanel();
-      add(buttonPanel, BorderLayout.SOUTH);
+        JPanel buttonPanel = new JPanel();
+        add(buttonPanel, BorderLayout.SOUTH);
 
-      findButton = new JButton("Find");
-      findButton.addActionListener(new ActionListener()
-         {
-            public void actionPerformed(ActionEvent event)
-            {
-               findEntry();
+        findButton = new JButton("Find");
+        findButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                findEntry();
             }
-         });
-      buttonPanel.add(findButton);
+        });
+        buttonPanel.add(findButton);
 
-      saveButton = new JButton("Save");
-      saveButton.addActionListener(new ActionListener()
-         {
-            public void actionPerformed(ActionEvent event)
-            {
-               saveEntry();
+        saveButton = new JButton("Save");
+        saveButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                saveEntry();
             }
-         });
-      buttonPanel.add(saveButton);
+        });
+        buttonPanel.add(saveButton);
 
-      deleteButton = new JButton("Delete");
-      deleteButton.addActionListener(new ActionListener()
-         {
-            public void actionPerformed(ActionEvent event)
-            {
-               deleteEntry();
+        deleteButton = new JButton("Delete");
+        deleteButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                deleteEntry();
             }
-         });
-      buttonPanel.add(deleteButton);
+        });
+        buttonPanel.add(deleteButton);
 
-      addWindowListener(new WindowAdapter()
-         {
-            public void windowClosing(WindowEvent event)
-            {
-               try
-               {
-                  if (context != null) context.close();
-               }
-               catch (NamingException e)
-               {
-                  e.printStackTrace();
-               }
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent event) {
+                try {
+                    if (context != null) context.close();
+                } catch (NamingException e) {
+                    e.printStackTrace();
+                }
             }
-         });
-   }
+        });
+    }
 
-   /**
-    * Finds the entry for the uid in the text field.
-    */
-   public void findEntry()
-   {
-      try
-      {
-         if (scrollPane != null) remove(scrollPane);
-         String dn = "uid=" + uidField.getText() + ",ou=people,dc=mycompany,dc=com";
-         if (context == null) context = getContext();
-         attrs = context.getAttributes(dn);
-         dataPanel = new DataPanel(attrs);
-         scrollPane = new JScrollPane(dataPanel);
-         add(scrollPane, BorderLayout.CENTER);
-         validate();
-         uid = uidField.getText();
-      }
-      catch (NamingException e)
-      {
-         JOptionPane.showMessageDialog(this, e);
-      }
-      catch (IOException e)
-      {
-         JOptionPane.showMessageDialog(this, e);
-      }
-   }
-
-   /**
-    * Saves the changes that the user made.
-    */
-   public void saveEntry()
-   {
-      try
-      {
-         if (dataPanel == null) return;
-         if (context == null) context = getContext();
-         if (uidField.getText().equals(uid)) // update existing entry
-         {
+    /**
+     * Finds the entry for the uid in the text field.
+     */
+    public void findEntry() {
+        try {
+            if (scrollPane != null) remove(scrollPane);
             String dn = "uid=" + uidField.getText() + ",ou=people,dc=mycompany,dc=com";
-            Attributes editedAttrs = dataPanel.getEditedAttributes();
-            NamingEnumeration<? extends Attribute> attrEnum = attrs.getAll();
-            while (attrEnum.hasMore())
+            if (context == null) context = getContext();
+            attrs = context.getAttributes(dn);
+            dataPanel = new DataPanel(attrs);
+            scrollPane = new JScrollPane(dataPanel);
+            add(scrollPane, BorderLayout.CENTER);
+            validate();
+            uid = uidField.getText();
+        } catch (NamingException e) {
+            JOptionPane.showMessageDialog(this, e);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, e);
+        }
+    }
+
+    /**
+     * Saves the changes that the user made.
+     */
+    public void saveEntry() {
+        try {
+            if (dataPanel == null) return;
+            if (context == null) context = getContext();
+            if (uidField.getText().equals(uid)) // update existing entry
             {
-               Attribute attr = attrEnum.next();
-               String id = attr.getID();
-               Attribute editedAttr = editedAttrs.get(id);
-               if (editedAttr != null && !attr.get().equals(editedAttr.get())) context
-                     .modifyAttributes(dn, DirContext.REPLACE_ATTRIBUTE, new BasicAttributes(id,
-                           editedAttr.get()));
+                String dn = "uid=" + uidField.getText() + ",ou=people,dc=mycompany,dc=com";
+                Attributes editedAttrs = dataPanel.getEditedAttributes();
+                NamingEnumeration<? extends Attribute> attrEnum = attrs.getAll();
+                while (attrEnum.hasMore()) {
+                    Attribute attr = attrEnum.next();
+                    String id = attr.getID();
+                    Attribute editedAttr = editedAttrs.get(id);
+                    if (editedAttr != null && !attr.get().equals(editedAttr.get())) context
+                            .modifyAttributes(dn, DirContext.REPLACE_ATTRIBUTE, new BasicAttributes(id,
+                                    editedAttr.get()));
+                }
+            } else
+            // create new entry
+            {
+                String dn = "uid=" + uidField.getText() + ",ou=people,dc=mycompany,dc=com";
+                attrs = dataPanel.getEditedAttributes();
+                Attribute objclass = new BasicAttribute("objectClass");
+                objclass.add("uidObject");
+                objclass.add("person");
+                attrs.put(objclass);
+                attrs.put("uid", uidField.getText());
+                context.createSubcontext(dn, attrs);
             }
-         }
-         else
-         // create new entry
-         {
+
+            findEntry();
+        } catch (NamingException e) {
+            JOptionPane.showMessageDialog(LDAPFrame.this, e);
+            e.printStackTrace();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(LDAPFrame.this, e);
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Deletes the entry for the uid in the text field.
+     */
+    public void deleteEntry() {
+        try {
             String dn = "uid=" + uidField.getText() + ",ou=people,dc=mycompany,dc=com";
-            attrs = dataPanel.getEditedAttributes();
-            Attribute objclass = new BasicAttribute("objectClass");
-            objclass.add("uidObject");
-            objclass.add("person");
-            attrs.put(objclass);
-            attrs.put("uid", uidField.getText());
-            context.createSubcontext(dn, attrs);
-         }
+            if (context == null) context = getContext();
+            context.destroySubcontext(dn);
+            uidField.setText("");
+            remove(scrollPane);
+            scrollPane = null;
+            repaint();
+        } catch (NamingException e) {
+            JOptionPane.showMessageDialog(LDAPFrame.this, e);
+            e.printStackTrace();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(LDAPFrame.this, e);
+            e.printStackTrace();
+        }
+    }
 
-         findEntry();
-      }
-      catch (NamingException e)
-      {
-         JOptionPane.showMessageDialog(LDAPFrame.this, e);
-         e.printStackTrace();
-      }
-      catch (IOException e)
-      {
-         JOptionPane.showMessageDialog(LDAPFrame.this, e);
-         e.printStackTrace();
-      }
-   }
+    /**
+     * Gets a context from the properties specified in the file ldapserver.properties
+     *
+     * @return the directory context
+     */
+    public static DirContext getContext() throws NamingException, IOException {
+        Properties props = new Properties();
+        FileInputStream in = new FileInputStream("ldapserver.properties");
+        props.load(in);
+        in.close();
 
-   /**
-    * Deletes the entry for the uid in the text field.
-    */
-   public void deleteEntry()
-   {
-      try
-      {
-         String dn = "uid=" + uidField.getText() + ",ou=people,dc=mycompany,dc=com";
-         if (context == null) context = getContext();
-         context.destroySubcontext(dn);
-         uidField.setText("");
-         remove(scrollPane);
-         scrollPane = null;
-         repaint();
-      }
-      catch (NamingException e)
-      {
-         JOptionPane.showMessageDialog(LDAPFrame.this, e);
-         e.printStackTrace();
-      }
-      catch (IOException e)
-      {
-         JOptionPane.showMessageDialog(LDAPFrame.this, e);
-         e.printStackTrace();
-      }
-   }
+        String url = props.getProperty("ldap.url");
+        String username = props.getProperty("ldap.username");
+        String password = props.getProperty("ldap.password");
 
-   /**
-    * Gets a context from the properties specified in the file ldapserver.properties
-    * @return the directory context
-    */
-   public static DirContext getContext() throws NamingException, IOException
-   {
-      Properties props = new Properties();
-      FileInputStream in = new FileInputStream("ldapserver.properties");
-      props.load(in);
-      in.close();
+        Hashtable<String, String> env = new Hashtable<String, String>();
+        env.put(Context.SECURITY_PRINCIPAL, username);
+        env.put(Context.SECURITY_CREDENTIALS, password);
+        DirContext initial = new InitialDirContext(env);
+        DirContext context = (DirContext) initial.lookup(url);
 
-      String url = props.getProperty("ldap.url");
-      String username = props.getProperty("ldap.username");
-      String password = props.getProperty("ldap.password");
+        return context;
+    }
 
-      Hashtable<String, String> env = new Hashtable<String, String>();
-      env.put(Context.SECURITY_PRINCIPAL, username);
-      env.put(Context.SECURITY_CREDENTIALS, password);
-      DirContext initial = new InitialDirContext(env);
-      DirContext context = (DirContext) initial.lookup(url);
+    public static final int DEFAULT_WIDTH = 300;
+    public static final int DEFAULT_HEIGHT = 200;
 
-      return context;
-   }
+    private JButton findButton;
+    private JButton saveButton;
+    private JButton deleteButton;
 
-   public static final int DEFAULT_WIDTH = 300;
-   public static final int DEFAULT_HEIGHT = 200;
+    private JTextField uidField;
+    private DataPanel dataPanel;
+    private Component scrollPane;
 
-   private JButton findButton;
-   private JButton saveButton;
-   private JButton deleteButton;
-
-   private JTextField uidField;
-   private DataPanel dataPanel;
-   private Component scrollPane;
-
-   private DirContext context;
-   private String uid;
-   private Attributes attrs;
+    private DirContext context;
+    private String uid;
+    private Attributes attrs;
 }
 
 /**
  * This panel displays the contents of a result set.
  */
-class DataPanel extends JPanel
-{
-   /**
-    * Constructs the data panel.
-    * @param attributes the attributes of the given entry
-    */
-   public DataPanel(Attributes attrs) throws NamingException
-   {
-      setLayout(new java.awt.GridLayout(0, 2, 3, 1));
+class DataPanel extends JPanel {
+    /**
+     * Constructs the data panel.
+     *
+     * @param attributes the attributes of the given entry
+     */
+    public DataPanel(Attributes attrs) throws NamingException {
+        setLayout(new java.awt.GridLayout(0, 2, 3, 1));
 
-      NamingEnumeration<? extends Attribute> attrEnum = attrs.getAll();
-      while (attrEnum.hasMore())
-      {
-         Attribute attr = attrEnum.next();
-         String id = attr.getID();
+        NamingEnumeration<? extends Attribute> attrEnum = attrs.getAll();
+        while (attrEnum.hasMore()) {
+            Attribute attr = attrEnum.next();
+            String id = attr.getID();
 
-         NamingEnumeration<?> valueEnum = attr.getAll();
-         while (valueEnum.hasMore())
-         {
-            Object value = valueEnum.next();
-            if (id.equals("userPassword")) value = new String((byte[]) value);
+            NamingEnumeration<?> valueEnum = attr.getAll();
+            while (valueEnum.hasMore()) {
+                Object value = valueEnum.next();
+                if (id.equals("userPassword")) value = new String((byte[]) value);
 
-            JLabel idLabel = new JLabel(id, SwingConstants.RIGHT);
-            JTextField valueField = new JTextField("" + value);
-            if (id.equals("objectClass")) valueField.setEditable(false);
-            if (!id.equals("uid"))
-            {
-               add(idLabel);
-               add(valueField);
+                JLabel idLabel = new JLabel(id, SwingConstants.RIGHT);
+                JTextField valueField = new JTextField("" + value);
+                if (id.equals("objectClass")) valueField.setEditable(false);
+                if (!id.equals("uid")) {
+                    add(idLabel);
+                    add(valueField);
+                }
             }
-         }
-      }
-   }
+        }
+    }
 
-   public Attributes getEditedAttributes()
-   {
-      Attributes attrs = new BasicAttributes();
-      for (int i = 0; i < getComponentCount(); i += 2)
-      {
-         JLabel idLabel = (JLabel) getComponent(i);
-         JTextField valueField = (JTextField) getComponent(i + 1);
-         String id = idLabel.getText();
-         String value = valueField.getText();
-         if (id.equals("userPassword")) attrs.put("userPassword", value.getBytes());
-         else if (!id.equals("") && !id.equals("objectClass")) attrs.put(id, value);
-      }
-      return attrs;
-   }
+    public Attributes getEditedAttributes() {
+        Attributes attrs = new BasicAttributes();
+        for (int i = 0; i < getComponentCount(); i += 2) {
+            JLabel idLabel = (JLabel) getComponent(i);
+            JTextField valueField = (JTextField) getComponent(i + 1);
+            String id = idLabel.getText();
+            String value = valueField.getText();
+            if (id.equals("userPassword")) attrs.put("userPassword", value.getBytes());
+            else if (!id.equals("") && !id.equals("objectClass")) attrs.put(id, value);
+        }
+        return attrs;
+    }
 }

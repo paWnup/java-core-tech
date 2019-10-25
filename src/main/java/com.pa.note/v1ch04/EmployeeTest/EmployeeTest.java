@@ -1,4 +1,7 @@
-import java.util.*;
+package com.pa.note.v1ch04.EmployeeTest;
+
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * This program tests the Employee class.
