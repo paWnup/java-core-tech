@@ -31,7 +31,7 @@ class BounceFrame extends JFrame {
      * Constructs the frame with the component for showing the bouncing ball and Start and Close
      * buttons
      */
-    public BounceFrame() {
+    BounceFrame() {
         setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         setTitle("Bounce");
 
@@ -59,7 +59,7 @@ class BounceFrame extends JFrame {
      * @param title    the button title
      * @param listener the action listener for the button
      */
-    public void addButton(Container c, String title, ActionListener listener) {
+    private void addButton(Container c, String title, ActionListener listener) {
         JButton button = new JButton(title);
         c.add(button);
         button.addActionListener(listener);
@@ -68,7 +68,7 @@ class BounceFrame extends JFrame {
     /**
      * Adds a bouncing ball to the panel and makes it bounce 1,000 times.
      */
-    public void addBall() {
+    private void addBall() {
         try {
             Ball ball = new Ball();
             comp.add(ball);
@@ -85,6 +85,6 @@ class BounceFrame extends JFrame {
     private BallComponent comp;
     public static final int DEFAULT_WIDTH = 450;
     public static final int DEFAULT_HEIGHT = 350;
-    public static final int STEPS = 1000;
-    public static final int DELAY = 3;
+    private static final int STEPS = 1000;
+    private static final int DELAY = 3;
 }

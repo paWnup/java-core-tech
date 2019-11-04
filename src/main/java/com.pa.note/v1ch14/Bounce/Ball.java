@@ -37,7 +37,7 @@ public class Ball {
     /**
      * Gets the shape of the ball at its current position.
      */
-    public Ellipse2D getShape() {
+    Ellipse2D getShape() {
         return new Ellipse2D.Double(x, y, XSIZE, YSIZE);
     }
 
